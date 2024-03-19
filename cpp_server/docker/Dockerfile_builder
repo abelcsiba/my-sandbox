@@ -1,0 +1,27 @@
+
+FROM ubuntu:23.10
+
+RUN apt-get update
+
+RUN apt-get install -y cmake git g++
+
+RUN git clone https://github.com/nghttp2/nghttp2.git
+WORKDIR /nghttp2/
+RUN mkdir build
+RUN cmake -S . -B build 
+RUN cmake --build build
+WORKDIR /nghttp2/build
+RUN make
+RUN make install
+
+RUN apt-get install -y libboost-all-dev libssl-dev
+
+WORKDIR /
+RUN git clone https://github.com/nghttp2/nghttp2-asio.git
+WORKDIR /nghttp2-asio/
+RUN mkdir build
+RUN cmake -S . -B build
+RUN cmake --build build
+WORKDIR /nghttp2-asio/build
+RUN make
+RUN make install

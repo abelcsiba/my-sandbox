@@ -1,0 +1,12 @@
+
+FROM custom_builder:1.0
+
+WORKDIR /app
+
+COPY . ./
+
+RUN make 
+
+EXPOSE 8085
+
+CMD ["/app/Server"]
