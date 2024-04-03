@@ -9,7 +9,7 @@ using namespace nghttp2::asio_http2::server;
 int main(int argc, char **argv)
 {
 	boost::system::error_code ec;
-	boost::asio::ssl::context tls(boost::asio::ssl::context::sslv23);
+	boost::asio::ssl::context tls(boost::asio::ssl::context::tlsv12);
 
 	tls.use_private_key_file("/opt/certificates/tls.key", boost::asio::ssl::context::pem);
 	tls.use_certificate_chain_file("/opt/certificates/tls.crt");
@@ -20,10 +20,10 @@ int main(int argc, char **argv)
 
 	server.handle("/", [](const request &req, const response &res) {
 		res.write_head(200);
-		res.end("Hello World!\n");
+		res.end("{ \'message\': \'Hello World!\'}");
 	});
 
-	if (server.listen_and_serve(ec, tls, "127.0.0.1", "8085")) {
+	if (server.listen_and_serve(ec, tls, "localhost", "8443")) {
 		std::cerr << "Failed to launch server: " << ec.message() << std::endl;
 	}
 

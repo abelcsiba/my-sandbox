@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpp-server
+  labels:
+    app: cpp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpp-server
+  template:
+    metadata:
+      labels:
+        app: cpp-server
+    spec:
+      containers:
+      - name: cpp-server
+        image: cpp-server:1.0
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: server-tls
+            mountPath: /opt/certificates/
+      volumes:
+        - name: server-tls
+          secret:
+            secretName: server-tls-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2024-03-31T21:45:41Z"
+  labels:
+    app: cppservice
+  name: cppservice
+spec:
+  ports:
+  - port: 443
+    name: https
+    protocol: TCP
+    targetPort: 8443
+  selector:
+    app: cpp-server
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: server-tls-cm
+data:
+  tls.key: "LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSVBPNGl5SWhkdGFmbUZMNGx0Q3RNOHRkNnBGWS9Fd01sNDJUNlFVOTRZQWFvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFaGRPaTJZWER6ODJlYURFeFNDMkhJQW1MbDJOczNROXZVNnYvdnowaXExRmtuV3djbUJWYQpwMnJWNUp1eWNzc2ZaV0gzWUR2dEZOWjhXZGJrNEF2WmRBPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo="
+  tls.crt: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJJRENCeGdJVUFMSlBieFI3djMxMENYczVUUVJVVlByUzVLVXdDZ1lJS29aSXpqMEVBd0l3RVRFUE1BMEcKQTFVRUF3d0dVbTl2ZEVOQk1CNFhEVEkwTURRd01URTROVEUwT0ZvWERUSTJNVEl5TnpFNE5URTBPRm93RkRFUwpNQkFHQTFVRUF3d0piRzlqWVd4b2IzTjBNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUVoZE9pCjJZWER6ODJlYURFeFNDMkhJQW1MbDJOczNROXZVNnYvdnowaXExRmtuV3djbUJWYXAyclY1SnV5Y3NzZlpXSDMKWUR2dEZOWjhXZGJrNEF2WmREQUtCZ2dxaGtqT1BRUURBZ05KQURCR0FpRUFxTzJoYWMvUzYrSE15OFdtRUJaZgplY0ZkWXFkSzQ5RVlTV0phQUttU1Fna0NJUURZVjE5MXgrdTZRakxwVVFEWHF4VU5heExHMm85YW8yRHVWcGhDClVNK09Bdz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
