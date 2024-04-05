@@ -21,7 +21,7 @@ SRC_DIR=src
 all: main
 
 main: $(OBJ_FILES)
-	$(CXX) -o $(TARGET_DIR)/$(TARGET) $(OBJ_DIR)/$(OBJ_FILES) -I$(INCLUDE_DIR)/ -L$(LIB_DIR)/ $(LIBS)
+	$(CXX) -o $(TARGET_DIR)/$(TARGET) $(OBJ_DIR)/$(OBJ_FILES) -I$(INCLUDE_DIR)/ -I$(SRC_DIR)/server/ -L$(LIB_DIR)/ $(LIBS)
 
 main.o: 
 	$(CXX) -c $(SRC_DIR)/$(SRC_FILES) -o $(OBJ_DIR)/$(OBJ_FILES) -I$(INCLUDE_DIR)/
